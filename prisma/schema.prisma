@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -10,25 +7,42 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model User {
+  coreId    String   @id
+  firstName String
+  lastName  String
+  email     String
+  createdAt DateTime @default(now())
+  devices   Device[]
+}
+
 model Employee {
-  id          Int     @id @default(autoincrement())
-  coreId      String  @unique
-  firstName   String
-  lastName    String
-  email       String
-  devices     Device[]
+  coreId    String   @id
+  firstName String
+  lastName  String
+  email     String
+  createdAt DateTime @default(now())
+  devices   Device[]
 }
 
 model Device {
-  id            Int           @id @default(autoincrement())
-  typeId        Int
-  empId         Int
-  deviceType    DeviceType    @relation(fields: [typeId], references: [id])
-  employee      Employee      @relation(fields: [empId], references: [id])
+  id           Int        @id @default(autoincrement())
+  serialNo     String
+  typeId       Int
+  employeeId   String
+  userId       String
+  handedOn     DateTime   @default(now())
+  returnedOn   DateTime
+  isAvailable  Boolean    @default(true)
+  deviceType   DeviceType @relation(fields: [typeId], references: [id])
+  employee     Employee   @relation(fields: [employeeId], references: [coreId])
+  authorizedBy User       @relation(fields: [userId], references: [coreId])
+  createdAt    DateTime   @default(now())
 }
 
 model DeviceType {
-  id        Int         @id @default(autoincrement())
-  type      String      @unique
+  id        Int      @id @default(autoincrement())
+  type      String   @unique
+  createdAt DateTime @default(now())
   devices   Device[]
 }
