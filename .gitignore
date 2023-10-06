@@ -3,3 +3,7 @@ node_modules
 .env
 
 sample.js
+
+.cache
+
+dist
