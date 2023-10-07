@@ -1,13 +1,7 @@
-import { User } from "../DAO/user.dao.js";
+import { User } from "../dao/user.dao.js";
 
-export async function addUser({
-  coreId,
-  firstName,
-  lastName,
-  email,
-  devices = [],
-}) {
-  let user = await User.create({ coreId, firstName, lastName, email, devices });
+export async function addUser({ coreId, firstName, lastName, email }) {
+  let user = await User.create({ coreId, firstName, lastName, email });
 }
 
 export async function getUserByCoreId(coreId) {
@@ -17,9 +11,9 @@ export async function getUserByCoreId(coreId) {
 }
 
 export async function updateByCoreId(coreId, data) {
-    let result = await User.updateByCoreId(coreId, data);
+  let result = await User.updateByCoreId(coreId, data);
 }
 
 export async function deleteByCoreId(coreId) {
-    let result = await User.deleteByCoreId(coreId);
+  let result = await User.deleteByCoreId(coreId);
 }

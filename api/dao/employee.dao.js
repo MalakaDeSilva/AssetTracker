@@ -2,10 +2,9 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export class User {
-
+export class Employee {
   static create({ coreId, firstName, lastName, email }) {
-    return prisma.user.create({
+    return prisma.employee.create({
       data: {
         coreId,
         firstName,
@@ -16,20 +15,20 @@ export class User {
   }
 
   static findByCoreId(coreId) {
-    return prisma.user.findUnique({
+    return prisma.employee.findUnique({
       where: { coreId },
     });
   }
 
   static async updateByCoreId(coreId, data) {
-    return await prisma.user.update({
+    return await prisma.employee.update({
       where: { coreId },
       data,
     });
   }
 
   static async deleteByCoreId(coreId) {
-    return await prisma.user.delete({
+    return await prisma.employee.delete({
       where: { coreId },
     });
   }

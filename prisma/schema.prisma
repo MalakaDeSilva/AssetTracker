@@ -8,36 +8,31 @@ datasource db {
 }
 
 model User {
-  coreId    String   @id
+  coreId    String             @id
   firstName String
   lastName  String
   email     String
-  createdAt DateTime @default(now())
-  devices   Device[]
+  createdAt DateTime           @default(now())
+  devices   DeviceAllocation[]
 }
 
 model Employee {
-  coreId    String   @id
+  coreId    String             @id
   firstName String
   lastName  String
   email     String
-  createdAt DateTime @default(now())
-  devices   Device[]
+  createdAt DateTime           @default(now())
+  devices   DeviceAllocation[]
 }
 
 model Device {
-  id           Int        @id @default(autoincrement())
-  serialNo     String
-  typeId       Int
-  employeeId   String
-  userId       String
-  handedOn     DateTime   @default(now())
-  returnedOn   DateTime
-  isAvailable  Boolean    @default(true)
-  deviceType   DeviceType @relation(fields: [typeId], references: [id])
-  employee     Employee   @relation(fields: [employeeId], references: [coreId])
-  authorizedBy User       @relation(fields: [userId], references: [coreId])
-  createdAt    DateTime   @default(now())
+  id          Int        @id @default(autoincrement())
+  serialNo    String
+  typeId      Int
+  isAvailable Boolean    @default(true)
+  deviceType  DeviceType @relation(fields: [typeId], references: [id])
+  remarks     String
+  createdAt   DateTime   @default(now())
 }
 
 model DeviceType {
@@ -45,4 +40,16 @@ model DeviceType {
   type      String   @unique
   createdAt DateTime @default(now())
   devices   Device[]
+}
+
+model DeviceAllocation {
+  id           Int      @id @default(autoincrement())
+  employeeId   String
+  userId       String
+  handedOn     DateTime @default(now())
+  returnedOn   DateTime
+  employee     Employee @relation(fields: [employeeId], references: [coreId])
+  authorizedBy User     @relation(fields: [userId], references: [coreId])
+  remarks      String
+  createdAt    DateTime @default(now())
 }
