@@ -1,6 +1,5 @@
 import express from "express";
-import ParcelCore from "@parcel/core";
-const { default: Parcel } = ParcelCore;
+import PrcelBundler from "parcel-bundler";
 import bodyParser from "body-parser";
 
 import deviceAllocRouter from "./api/controller/device.allocation.controller.js";
@@ -10,7 +9,7 @@ import employeeRouter from "./api/controller/employee.controller.js";
 import userRouter from "./api/controller/user.controller.js";
 
 const app = express();
-const bundler = new Parcel("./public/index.html", {});
+const bundler = new PrcelBundler("./public/index.html", {});
 
 const PORT = 5000;
 
@@ -22,6 +21,8 @@ app.use("/api/devices", deviceRouter);
 app.use("/api/device-types", deviceTypeRouter);
 app.use("/api/employees", employeeRouter);
 app.use("/api/users", userRouter);
+
+app.use(bundler.middleware());
 
 app.use(express.static("./dist"));
 
