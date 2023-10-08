@@ -23,4 +23,9 @@
 
     on Terminal.
 
+### Contributing
 
+1. Create a new branch for your feature or bug fix.
+2. Make the necessary changes and commit them.
+3. Push the changes to your feat/bug_fix branch.
+4. Submit a pull request to the main.
