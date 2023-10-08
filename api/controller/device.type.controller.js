@@ -1,19 +1,30 @@
 import { DeviceType } from "../dao/device.type.dao.js";
+import express from "express";
 
-export async function addDeviceType({ id, type }) {
-  let deviceType = await DeviceType.create({ id, type });
-}
+const Router = express.Router();
 
-export async function getById(id) {
-  let result = await DeviceType.findById(id);
+Router.post("/new-device-type", (req, res) => {
+  DeviceType.create({ type: req.body.deviceType })
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-  console.log(result);
-}
+Router.put("/:id", (req, res) => {
+  DeviceType.updateById(req.params.id, { type: req.body.deviceType })
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function updateById(id, data) {
-  let result = await DeviceType.updateById(id, data);
-}
+Router.get("/:id", (req, res) => {
+  DeviceType.findById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function deleteById(id) {
-  let result = await DeviceType.deleteById(id);
-}
+Router.delete("/:id", (req, res) => {
+  DeviceType.deleteById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+export default Router;

@@ -1,19 +1,43 @@
 import { Employee } from "../dao/employee.dao.js";
+import express from "express";
 
-export async function addEmployee({ coreId, firstName, lastName, email }) {
-  let employee = await Employee.create({ coreId, firstName, lastName, email });
-}
+const Router = express.Router();
 
-export async function getEmployeeByCoreId(coreId) {
-  let result = await Employee.findByCoreId(coreId);
+Router.post("/new-employee", (req, res) => {
+  let employee = {
+    coreId: req.body.coreId,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  };
 
-  console.log(result);
-}
+  Employee.create(employee)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function updateByCoreId(coreId, data) {
-  let result = await Employee.updateByCoreId(coreId, data);
-}
+Router.get("/:coreId", (req, res) => {
+  Employee.findByCoreId(req.params.coreId)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function deleteByCoreId(coreId) {
-  let result = await Employee.deleteByCoreId(coreId);
-}
+Router.put("/:coreId", (req, res) => {
+  let employee = {
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  };
+
+  Employee.updateByCoreId(req.params.coreId, employee)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.delete("/:coreId", (req, res) => {
+  Employee.deleteByCoreId(req.params.coreId)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+export default Router;

@@ -1,19 +1,44 @@
 import { User } from "../dao/user.dao.js";
+import express from "express";
 
-export async function addUser({ coreId, firstName, lastName, email }) {
-  let user = await User.create({ coreId, firstName, lastName, email });
-}
+const Router = express.Router();
 
-export async function getUserByCoreId(coreId) {
-  let result = await User.findByCoreId(coreId);
+Router.post("/new-user", (req, res) => {
+  let user = {
+    coreId: req.body.coreId,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  };
 
-  console.log(result);
-}
+  User.create(user)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function updateByCoreId(coreId, data) {
-  let result = await User.updateByCoreId(coreId, data);
-}
+Router.get("/:coreId", (req, res) => {
+  User.findByCoreId(req.params.coreId)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function deleteByCoreId(coreId) {
-  let result = await User.deleteByCoreId(coreId);
-}
+Router.put("/:coreId", (req, res) => {
+  let user = {
+    coreId: req.body.coreId,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    email: req.body.email,
+  };
+
+  User.updateByCoreId(req.params.coreId, user)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.delete("/:coreId", (req, res) => {
+  User.deleteByCoreId(req.params.coreId)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+export default Router;

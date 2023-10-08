@@ -1,19 +1,48 @@
-import { Device } from "../dao/device.dao";
+import { Device } from "../dao/device.dao.js";
+import express from "express";
 
-export async function addDeviceType({ type }) {
-  let device = await Device.create({ type });
-}
+const Router = express.Router();
 
-export async function getById(id) {
-  let result = await Device.findById(id);
+Router.post("/new-device", (req, res) => {
+  let device = {
+    serialNo: req.body.serialNo,
+    type: req.body.deviceType,
+    remarks: req.body.remarks,
+  };
 
-  console.log(result);
-}
+  if (Object.keys(req.body).includes("isAvailable"))
+    device["isAvailable"] = req.body.isAvailable;
 
-export async function updateById(id, data) {
-  let result = await Device.updateById(id, data);
-}
+  Device.create(device)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function deleteById(id) {
-  let result = await Device.deleteById(id);
-}
+Router.get("/:id", (req, res) => {
+  Device.findById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.put("/:id", (req, res) => {
+  let device = {
+    serialNo: req.body.serialNo,
+    type: req.body.deviceType,
+    remarks: req.body.remarks,
+  };
+
+  if (Object.keys(req.body).includes("isAvailable"))
+    device["isAvailable"] = req.body.isAvailable;
+
+  Device.updateById(id, device)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.delete("/:id", (req, res) => {
+  Device.deleteById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+export default Router;

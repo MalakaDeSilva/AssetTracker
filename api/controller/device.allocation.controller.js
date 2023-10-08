@@ -1,31 +1,42 @@
-import { DeviceAllocation } from "../dao/device.allocation.dao";
+import { DeviceAllocation } from "../dao/device.allocation.dao.js";
+import express from "express";
 
-export async function addDeviceType({
-  employeeId,
-  userId,
-  handedOn,
-  returnedOn,
-  remarks,
-}) {
-  let device = await DeviceAllocation.create({
-    employeeId,
-    userId,
-    handedOn,
-    returnedOn,
-    remarks,
-  });
-}
+const Router = express.Router();
 
-export async function getById(id) {
-  let result = await DeviceAllocation.findById(id);
+Router.post("/allocate-device", (req, res) => {
+  DeviceAllocation.create({
+    employeeId: req.body.employeeId,
+    userId: req.body.userId,
+    handedOn: req.body.handedOn,
+    returnedOn: req.body.returnedOn,
+    remarks: req.body.remarks,
+  })
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-  console.log(result);
-}
+Router.get("/:id", (req, res) => {
+  DeviceAllocation.findById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function updateById(id, data) {
-  let result = await DeviceAllocation.updateById(id, data);
-}
+Router.delete("/:id", (req, res) => {
+  DeviceAllocation.deleteById(req.params.id)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
 
-export async function deleteById(id) {
-  let result = await DeviceAllocation.deleteById(id);
-}
+Router.put("/:id", (req, res) => {
+  DeviceAllocation.updateById(id, {
+    employeeId: req.body.employeeId,
+    userId: req.body.userId,
+    handedOn: req.body.handedOn,
+    returnedOn: req.body.returnedOn,
+    remarks: req.body.remarks,
+  })
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+export default Router;
