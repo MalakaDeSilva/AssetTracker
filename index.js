@@ -2,11 +2,11 @@ import express from "express";
 import PrcelBundler from "parcel-bundler";
 import bodyParser from "body-parser";
 
-import deviceAllocRouter from "./api/controller/device.allocation.controller.js";
-import deviceRouter from "./api/controller/device.controller.js";
-import deviceTypeRouter from "./api/controller/device.type.controller.js";
-import employeeRouter from "./api/controller/employee.controller.js";
-import userRouter from "./api/controller/user.controller.js";
+import deviceAllocRouter from "./api/routes/device.allocation.routes.js";
+import deviceRouter from "./api/routes/device.routes.js";
+import deviceTypeRouter from "./api/routes/device.type.routes.js";
+import employeeRouter from "./api/routes/employee.routes.js";
+import userRouter from "./api/routes/user.routes.js";
 
 const app = express();
 const bundler = new PrcelBundler("./public/index.html", {});

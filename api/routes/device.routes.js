@@ -1,4 +1,4 @@
-import { Device } from "../dao/device.dao.js";
+import { Device } from "../controller/device.dao.js";
 import express from "express";
 
 const Router = express.Router();
