@@ -1,4 +1,4 @@
-import { DeviceAllocation } from "../dao/device.allocation.dao.js";
+import { DeviceAllocation } from "../controller/device.allocation.dao.js";
 import express from "express";
 
 const Router = express.Router();
