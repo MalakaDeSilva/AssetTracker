@@ -21,7 +21,7 @@ function findMany(withRelations) {
 }
 
 function findByCoreId(coreId, withRelations) {
-  return prisma.employee.findUnique({
+  return prisma.employee.findMany({
     where: { coreId },
     include: { devices: withRelations },
   });

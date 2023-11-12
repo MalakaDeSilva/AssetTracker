@@ -15,12 +15,16 @@ function create({ employeeId, userId, deviceId, remarks }) {
 
 function findMany(withRelations) {
   return prisma.deviceAllocation.findMany({
-    include: { employee: withRelations, authorizedBy: withRelations },
+    include: {
+      employee: withRelations,
+      authorizedBy: withRelations,
+      device: withRelations,
+    },
   });
 }
 
 function findById(id, withRelations) {
-  return prisma.deviceAllocation.findUnique({
+  return prisma.deviceAllocation.findMany({
     where: { id },
     include: { employee: withRelations, authorizedBy: withRelations },
   });

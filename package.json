@@ -8,6 +8,7 @@
     "build": "vite build"
   },
   "dependencies": {
+    "@ant-design/icons": "^5.2.6",
     "@parcel/core": "^2.9.3",
     "@prisma/client": "^5.4.1",
     "antd": "^5.11.1",

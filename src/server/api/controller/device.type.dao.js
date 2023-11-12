@@ -20,7 +20,7 @@ function findMany(withRelations) {
 }
 
 function findById(id, withRelations) {
-  return prisma.deviceType.findUnique({
+  return prisma.deviceType.findMany({
     where: { id },
     include: {
       devices: withRelations,

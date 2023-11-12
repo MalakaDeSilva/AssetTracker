@@ -17,7 +17,7 @@ function findMany(withRelations) {
 }
 
 function findById(id, withRelations) {
-  return prisma.device.findUnique({
+  return prisma.device.findMany({
     where: { id },
     include: {
       deviceType: withRelations,

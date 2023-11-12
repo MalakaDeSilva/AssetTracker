@@ -36,7 +36,7 @@ const EmployeeStore = {
   }),
   updateEmployeeAction: action((state, employee) => {
     state.employees = state.employees.map((emp) => {
-      if (emp["_id"] === employee["_id"]) {
+      if (emp["id"] === employee["id"]) {
         emp = employee;
       }
 
@@ -53,7 +53,14 @@ const EmployeeStore = {
 
     try {
       let { data } = await getEmployeeData(scope);
-      action.setEmployeesAction(data);
+      action.setEmployeesAction(
+        data.map((v, i) => {
+          return {
+            ...v,
+            key: v.coreId,
+          };
+        })
+      );
     } catch (e) {
       action.setErrorAction(e.message);
     }
@@ -65,7 +72,14 @@ const EmployeeStore = {
 
     try {
       let { data } = await getEmployeeDataById(id, scope);
-      action.setEmployeesAction(data);
+      action.setEmployeesAction(
+        data.map((v, i) => {
+          return {
+            ...v,
+            key: v.id,
+          };
+        })
+      );
     } catch (e) {
       action.setErrorAction(e.message);
     }

@@ -31,18 +31,18 @@ function SideBar(props) {
             <Menu.Item key="2">
               <Link to="/employees">Employees</Link>
             </Menu.Item>
-            <Menu.Item key="3">
+            {/* <Menu.Item key="3">
               <Link to="/users">Users</Link>
-            </Menu.Item>
+            </Menu.Item> */}
           </SubMenu>
-          <SubMenu key="sub2" icon={<LaptopOutlined />} title="Payroll">
+          <SubMenu key="sub2" icon={<LaptopOutlined />} title="Devices">
             <Menu.Item key="6">
               <Link to="/devices">Devices</Link>
             </Menu.Item>
             <Menu.Item key="7">
               <Link to="/allocations">Device Allocations</Link>
             </Menu.Item>
-            <Menu.Item key="7">
+            <Menu.Item key="8">
               <Link to="/device-types">Device Types</Link>
             </Menu.Item>
           </SubMenu>

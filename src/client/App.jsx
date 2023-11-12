@@ -6,10 +6,16 @@ import Employees from "./pages/Employees";
 import SideBar from "./common/SideBar";
 import DeviceStore from "./stores/DeviceStore";
 import Devices from "./pages/Devices";
+import DeviceTypeStore from "./stores/DeviceTypeStore";
+import DeviceTypes from "./pages/DeviceTypes";
+import AllocationStore from "./stores/AllocationStore";
+import Allocations from "./pages/Allocations";
 
 const globalStore = {
   employees: EmployeeStore,
   devices: DeviceStore,
+  deviceTypes: DeviceTypeStore,
+  allocations: AllocationStore,
 };
 
 const store = createStore(globalStore);
@@ -23,6 +29,8 @@ function App() {
             <Route exact path="/" element={<SideBar />}>
               <Route path="/employees" element={<Employees />} />
               <Route path="/devices" element={<Devices />} />
+              <Route path="/device-types" element={<DeviceTypes />} />
+              <Route path="/allocations" element={<Allocations />} />
             </Route>
           </Routes>
         </BrowserRouter>

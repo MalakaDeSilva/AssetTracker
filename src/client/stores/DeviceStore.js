@@ -51,7 +51,12 @@ const DeviceStore = {
 
     try {
       let { data } = await getDeviceData(scope);
-      action.setDevicesAction(data);
+
+      action.setDevicesAction(
+        data.map((v, i) => {
+          return { ...v, key: v.id };
+        })
+      );
     } catch (e) {
       action.setErrorAction(e.message);
     }
@@ -85,7 +90,7 @@ const DeviceStore = {
     }
     action.setIsDeviceLoadingAction();
   }),
-  updateEmployeeThunk: thunk(async (action, data) => {
+  updateDeviceThunk: thunk(async (action, data) => {
     action.setIsDeviceLoadingAction();
 
     try {
@@ -100,7 +105,7 @@ const DeviceStore = {
     }
     action.setIsDeviceLoadingAction();
   }),
-  deleteEmployeeThunk: thunk(async (action, id) => {
+  deleteDeviceThunk: thunk(async (action, id) => {
     action.setIsDeviceLoadingAction();
 
     try {
