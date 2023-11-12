@@ -2,7 +2,7 @@ import { Layout, Menu } from "antd";
 import {
   UserOutlined,
   HomeOutlined,
-  BankOutlined,
+  LaptopOutlined,
   LogoutOutlined,
 } from "@ant-design/icons";
 import React, { useState } from "react";
@@ -21,12 +21,7 @@ function SideBar(props) {
 
   return (
     <Layout>
-      <Sider
-        collapsible
-        collapsed={collapsed}
-        onCollapse={onCollapse}
-        style={{ height: "100%", position: "fixed" }}
-      >
+      <Sider collapsible collapsed={collapsed} onCollapse={onCollapse}>
         <div className="logo" />
         <Menu theme="dark" defaultSelectedKeys={["1"]} mode="inline">
           <Menu.Item key="1" icon={<HomeOutlined />}>
@@ -40,27 +35,20 @@ function SideBar(props) {
               <Link to="/users">Users</Link>
             </Menu.Item>
           </SubMenu>
-          <SubMenu key="sub2" icon={<BankOutlined />} title="Payroll">
+          <SubMenu key="sub2" icon={<LaptopOutlined />} title="Payroll">
             <Menu.Item key="6">
-              <Link to="/employee-salary">Employee Salary</Link>
+              <Link to="/devices">Devices</Link>
             </Menu.Item>
             <Menu.Item key="7">
-              <Link to="/salary-slips">Payslips</Link>
+              <Link to="/allocations">Device Allocations</Link>
+            </Menu.Item>
+            <Menu.Item key="7">
+              <Link to="/device-types">Device Types</Link>
             </Menu.Item>
           </SubMenu>
-          <Menu.Divider />
-          <Menu.Item
-            key="8"
-            icon={<LogoutOutlined />}
-            onClick={(e) => {
-              navigate("/login");
-            }}
-          >
-            Log out
-          </Menu.Item>
         </Menu>
       </Sider>
-      <Layout style={{ minHeight: "100vh", marginLeft: "200px" }}>
+      <Layout style={{ minHeight: "100vh" }}>
         <Content>
           <Outlet />
         </Content>

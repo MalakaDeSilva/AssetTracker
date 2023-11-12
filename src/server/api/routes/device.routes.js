@@ -24,10 +24,7 @@ Router.post("/new-device", async (req, res) => {
 
   Device.create(device)
     .then((result) => res.status(200).json(result))
-    .catch((err) => {
-      console.log(err);
-      res.status(200).json({ error: err });
-    });
+    .catch((err) => res.status(200).json({ error: err }));
 });
 
 Router.get("/:all", (req, res) => {

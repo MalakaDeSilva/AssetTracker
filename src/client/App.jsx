@@ -1,20 +1,20 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
 import "./App.css";
 import EmployeeStore from "./stores/EmployeeStore";
 import { StoreProvider, createStore } from "easy-peasy";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Employees from "./pages/Employees";
 import SideBar from "./common/SideBar";
+import DeviceStore from "./stores/DeviceStore";
+import Devices from "./pages/Devices";
 
 const globalStore = {
   employees: EmployeeStore,
+  devices: DeviceStore,
 };
 
 const store = createStore(globalStore);
 
 function App() {
-
   return (
     <StoreProvider store={store}>
       <div className="App">
@@ -22,6 +22,7 @@ function App() {
           <Routes>
             <Route exact path="/" element={<SideBar />}>
               <Route path="/employees" element={<Employees />} />
+              <Route path="/devices" element={<Devices />} />
             </Route>
           </Routes>
         </BrowserRouter>
