@@ -1,10 +1,13 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
 generator client {
   provider = "prisma-client-js"
 }
 
 datasource db {
   provider = "sqlite"
-  url      = env("DATABASE_URL")
+  url      = "file:./dev.db"
 }
 
 model User {
@@ -21,18 +24,25 @@ model Employee {
   firstName String
   lastName  String
   email     String
+  floor     Int
   createdAt DateTime           @default(now())
   devices   DeviceAllocation[]
 }
 
 model Device {
-  id          Int        @id @default(autoincrement())
-  serialNo    String
-  typeId      Int
-  isAvailable Boolean    @default(true)
-  deviceType  DeviceType @relation(fields: [typeId], references: [id])
-  remarks     String
-  createdAt   DateTime   @default(now())
+  id               Int                @id @default(autoincrement())
+  serialNo         String
+  model            String
+  powerAdapter     Boolean
+  bag              Boolean
+  typeId           Int
+  vendor           String
+  invoiceNo        String
+  isAvailable      Boolean            @default(true)
+  deviceType       DeviceType         @relation(fields: [typeId], references: [id])
+  remarks          String
+  createdAt        DateTime           @default(now())
+  deviceAllocation DeviceAllocation[]
 }
 
 model DeviceType {
@@ -43,13 +53,16 @@ model DeviceType {
 }
 
 model DeviceAllocation {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
+  deviceId     Int
   employeeId   String
   userId       String
-  handedOn     DateTime @default(now())
-  returnedOn   DateTime
-  employee     Employee @relation(fields: [employeeId], references: [coreId])
-  authorizedBy User     @relation(fields: [userId], references: [coreId])
+  handedOn     DateTime  @default(now())
+  hasReturned  Boolean   @default(false)
+  returnedOn   DateTime?
+  device       Device    @relation(fields: [deviceId], references: [id])
+  employee     Employee  @relation(fields: [employeeId], references: [coreId])
+  authorizedBy User      @relation(fields: [userId], references: [coreId])
   remarks      String
-  createdAt    DateTime @default(now())
+  createdAt    DateTime  @default(now())
 }

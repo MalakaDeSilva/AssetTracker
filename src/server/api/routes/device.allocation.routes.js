@@ -1,22 +1,35 @@
-import { DeviceAllocation } from "../controller/device.allocation.dao.js";
-import express from "express";
+const DeviceAllocation = require("../controller/device.allocation.dao.js");
+
+const express = require("express");
 
 const Router = express.Router();
 
-Router.post("/allocate-device", (req, res) => {
-  DeviceAllocation.create({
+Router.post("/allocate-device", async (req, res) => {
+  let deviceAlloc = {
     employeeId: req.body.employeeId,
     userId: req.body.userId,
-    handedOn: req.body.handedOn,
-    returnedOn: req.body.returnedOn,
+    deviceId: parseInt(req.body.deviceId),
     remarks: req.body.remarks,
-  })
+  };
+
+  DeviceAllocation.create(deviceAlloc)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => {
+      console.log(err);
+      res.status(200).json({ error: err });
+    });
+});
+
+Router.get("/:all", (req, res) => {
+  let withRelations = req.params.all === "all";
+  DeviceAllocation.findMany(withRelations)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.get("/:id", (req, res) => {
-  DeviceAllocation.findById(req.params.id)
+Router.get("/:id/:all", (req, res) => {
+  let withRelations = req.params.all === "all";
+  DeviceAllocation.findById(parseInt(req.params.id), withRelations)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
@@ -39,4 +52,4 @@ Router.put("/:id", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-export default Router;
+module.exports = Router;

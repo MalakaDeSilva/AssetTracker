@@ -1,5 +1,5 @@
-import { DeviceType } from "../controller/device.type.dao.js";
-import express from "express";
+const DeviceType = require("../controller/device.type.dao.js");
+const express = require("express");
 
 const Router = express.Router();
 
@@ -15,8 +15,16 @@ Router.put("/:id", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.get("/:id", (req, res) => {
-  DeviceType.findById(req.params.id)
+Router.get("/:all", (req, res) => {
+  let withRelations = req.params.all === "all";
+  DeviceType.findMany(withRelations)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.get("/:id/:all", (req, res) => {
+  let withRelations = req.params.all === "all";
+  DeviceType.findById(parseInt(req.params.id), withRelations)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
@@ -27,4 +35,4 @@ Router.delete("/:id", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-export default Router;
+module.exports = Router;
