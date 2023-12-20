@@ -1,16 +1,53 @@
-import { Button, Card, Space, Table, Tag, Tooltip, Flex, Spin } from "antd";
+import {
+  Button,
+  Card,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  Flex,
+  Spin,
+  Modal,
+} from "antd";
+import {
+  EditOutlined,
+  DeleteOutlined,
+  ExclamationCircleFilled,
+} from "@ant-design/icons";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
+import AddUpdateDevice from "./AddUpdateDevice";
 
 export default function Devices() {
   const [scope, setScope] = useState("all");
+  const [action, setAction] = useState("");
+  const [device, setDevice] = useState({});
 
   const { devices, isDeviceLoading } = useStoreState((state) => state.devices);
-  const { getDevicesThunk } = useStoreActions((actions) => actions.devices);
+  const { getDevicesThunk, actionDrawer, deleteDeviceThunk } = useStoreActions(
+    (actions) => actions.devices
+  );
+
+  const { confirm } = Modal;
 
   useEffect(() => {
     getDevicesThunk(scope);
   }, []);
+
+  const showConfirm = (record) => {
+    confirm({
+      title: "Do you Want to delete this item?",
+      icon: <ExclamationCircleFilled />,
+      content: "",
+      async onOk() {
+        await deleteDeviceThunk(record?.serialNo);
+        getDevicesThunk("all");
+      },
+      onCancel() {
+        console.log("Cancel");
+      },
+    });
+  };
 
   const columns = [
     {
@@ -47,17 +84,20 @@ export default function Devices() {
       title: "Type",
       dataIndex: "deviceType",
       key: "deviceType",
-      render: (data) => <Space size="middle">{data?.type}</Space>,
+      render: (data) => <Space size="small">{data?.type}</Space>,
     },
     {
-      title: "Vendor",
-      dataIndex: "vendor",
-      key: "vendor",
+      title: "Warranty",
+      dataIndex: "warranty",
+      key: "warranty",
+      render: (data) => (
+        <Tag color={data ? "success" : "error"}>{data ? "Yes" : "No"}</Tag>
+      ),
     },
     {
-      title: "Invoice",
-      dataIndex: "invoiceNo",
-      key: "invoiceNo",
+      title: "Warranty Period",
+      dataIndex: "warrantyPeriod",
+      key: "warrantyPeriod",
     },
     {
       title: "Availabilty",
@@ -74,16 +114,48 @@ export default function Devices() {
       dataIndex: "remarks",
       key: "remarks",
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <Space size="middle">
+          <Button
+            icon={<EditOutlined />}
+            shape="circle"
+            onClick={() => {
+              setAction("UPDATE");
+              setDevice(record);
+              actionDrawer();
+            }}
+          ></Button>
+          <Button
+            icon={<DeleteOutlined />}
+            shape="circle"
+            onClick={() => showConfirm(record)}
+          ></Button>
+        </Space>
+      ),
+    },
   ];
 
   return (
     <div>
+      <AddUpdateDevice action={action} device={device} />
       <Card
         title="Devices"
         style={{ margin: "20px", borderRadius: "15px" }}
         extra={
           <Tooltip title="New Device">
-            <Button type="primary">New Device</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setAction("ADD");
+                setDevice({});
+                actionDrawer();
+              }}
+            >
+              New Device
+            </Button>
           </Tooltip>
         }
       >

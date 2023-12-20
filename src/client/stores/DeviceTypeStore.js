@@ -80,8 +80,8 @@ const DeviceTypeStore = {
 
     try {
       let result = await addDeviceTypeData(data);
-      if (typeof result["data"] != "undefined")
-        action.pushDeviceTypesAction(result["data"]);
+      /* if (typeof result["data"] != "undefined")
+        action.pushDeviceTypesAction(result["data"]); */
 
       action.setIsDeviceTypeLoadingAction();
       return result;
@@ -110,7 +110,7 @@ const DeviceTypeStore = {
 
     try {
       let result = await deleteDeviceTypeData(id);
-      if (typeof result["data"] != "undefined") action.popDeviceTypesAction(id); // TODO: check result before popping
+      //if (typeof result["data"] != "undefined") action.popDeviceTypesAction(id); // TODO: check result before popping
 
       action.setIsDeviceTypeLoadingAction();
       return result;

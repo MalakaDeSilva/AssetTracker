@@ -15,9 +15,13 @@ export async function addDeviceData(data) {
 }
 
 export async function updateDeviceData(data) {
-  return await axiosIns.put(`/api/devices/${data["_id"]}`, data);
+  return await axiosIns.put(`/api/devices/${data["serialNo"]}`, data);
 }
 
 export async function deleteDeviceData(id) {
   return await axiosIns.delete(`/api/devices/${id}`);
+}
+
+export async function getDevicesUsingFilter(filter) {
+  return await axiosIns.post(`api/devices/filter`, filter);
 }

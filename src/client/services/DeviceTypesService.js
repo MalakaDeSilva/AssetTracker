@@ -15,7 +15,7 @@ export async function addDeviceTypeData(data) {
 }
 
 export async function updateDeviceTypeData(data) {
-  return await axiosIns.put(`/api/device-types/${data["_id"]}`, data);
+  return await axiosIns.put(`/api/device-types/${data["id"]}`, data);
 }
 
 export async function deleteDeviceTypeData(id) {

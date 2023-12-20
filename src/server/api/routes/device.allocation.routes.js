@@ -8,8 +8,11 @@ Router.post("/allocate-device", async (req, res) => {
   let deviceAlloc = {
     employeeId: req.body.employeeId,
     userId: req.body.userId,
-    deviceId: parseInt(req.body.deviceId),
+    deviceId: req.body.deviceId,
     remarks: req.body.remarks,
+    hasReturned: req.body?.hasReturned,
+    handedOn: req.body?.handedOn,
+    returnedOn: req.body?.returnedOn,
   };
 
   DeviceAllocation.create(deviceAlloc)
@@ -47,6 +50,9 @@ Router.put("/:id", (req, res) => {
     handedOn: req.body.handedOn,
     returnedOn: req.body.returnedOn,
     remarks: req.body.remarks,
+    hasReturned: req.body?.hasReturned,
+    handedOn: req.body?.handedOn,
+    returnedOn: req.body?.returnedOn,
   })
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));

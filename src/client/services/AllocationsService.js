@@ -21,3 +21,7 @@ export async function updateAllocationData(data) {
 export async function deleteAllocationData(id) {
   return await axiosIns.delete(`/api/device-alloc/${id}`);
 }
+
+export async function getAllocationsUsingFilter(filter) {
+  return await axiosIns.post(`api/devices/filter`, filter);
+}

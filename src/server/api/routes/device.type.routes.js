@@ -30,7 +30,7 @@ Router.get("/:id/:all", (req, res) => {
 });
 
 Router.delete("/:id", (req, res) => {
-  DeviceType.deleteById(req.params.id)
+  DeviceType.deleteById(parseInt(req.params.id))
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });

@@ -1,10 +1,14 @@
 import { Button, Card, Space, Table, Tag, Tooltip } from "antd";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
+import AddUpdateDeviceAllocation from "./AddUpdateDeviceAllocation";
 
 export default function Allocations() {
+  const { state } = useLocation();
+  const [employee, setEmployee] = useState({});
   const [scope, setScope] = useState("all");
-  const { getAllocationsThunk } = useStoreActions(
+  const { getAllocationsThunk, actionDrawer } = useStoreActions(
     (actions) => actions.allocations
   );
   const { isAllocationsLoading, allocations } = useStoreState(
@@ -12,19 +16,15 @@ export default function Allocations() {
   );
 
   useEffect(() => {
+    setEmployee(state?.employee);
     getAllocationsThunk(scope);
   }, []);
 
   let columns = [
     {
       title: "Device",
-      dataIndex: "device",
-      key: "device",
-      render: (data) => (
-        <Space size={"middle"}>
-          <Tooltip title={data?.serialNo}>{data?.id}</Tooltip>
-        </Space>
-      ),
+      dataIndex: "deviceId",
+      key: "deviceId",
     },
     {
       title: "Employee",
@@ -62,7 +62,7 @@ export default function Allocations() {
       key: "returnedOn",
       render: (data) => (
         <Space size="middle">
-          {data ? new Date(data).toLocaleDateString() : ""}
+          {data ? new Date(data).toLocaleDateString() : "N/A"}
         </Space>
       ),
     },
@@ -88,14 +88,17 @@ export default function Allocations() {
   return (
     <div>
       <Card
-        title="Device Allocations"
+        title={`Device Allocations ${employee?.firstName ? " : "+ employee?.firstName : ""} ${employee?.lastName ? employee?.lastName : ""}`}
         style={{ margin: "20px", borderRadius: "15px" }}
         extra={
           <Tooltip title="New Device Allocation">
-            <Button type="primary">New Device Allocation</Button>
+            <Button type="primary" onClick={actionDrawer}>
+              New Device Allocation
+            </Button>
           </Tooltip>
         }
       >
+        <AddUpdateDeviceAllocation action={"ADD"} />
         <Table columns={columns} dataSource={allocations} />
       </Card>
     </div>

@@ -2,14 +2,9 @@ const { PrismaClient } = require("@prisma/client");
 
 const prisma = new PrismaClient();
 
-function create({ employeeId, userId, deviceId, remarks }) {
+function create(data) {
   return prisma.deviceAllocation.create({
-    data: {
-      employeeId,
-      userId,
-      deviceId,
-      remarks,
-    },
+    data,
   });
 }
 

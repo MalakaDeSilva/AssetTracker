@@ -16,26 +16,37 @@ function findMany(withRelations) {
   });
 }
 
-function findById(id, withRelations) {
+function findById(serialNo, withRelations) {
   return prisma.device.findMany({
-    where: { id },
+    where: { serialNo },
     include: {
       deviceType: withRelations,
     },
   });
 }
 
-async function updateById(id, data) {
+async function updateById(serialNo, data) {
   return await prisma.device.update({
-    where: { id },
+    where: { serialNo },
     data,
   });
 }
 
-async function deleteById(id) {
+async function deleteById(serialNo) {
   return await prisma.device.delete({
-    where: { id },
+    where: { serialNo },
   });
 }
 
-module.exports = { create, findMany, findById, updateById, deleteById };
+function findUsingFilters(filter) {
+  return prisma.device.findMany({ where: filter });
+}
+
+module.exports = {
+  create,
+  findMany,
+  findById,
+  updateById,
+  deleteById,
+  findUsingFilters,
+};

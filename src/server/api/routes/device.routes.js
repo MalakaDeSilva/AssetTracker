@@ -1,6 +1,5 @@
 const express = require("express");
 const Device = require("../controller/device.dao.js");
-const DeviceType = require("../controller/device.type.dao.js");
 
 const Router = express.Router();
 
@@ -11,20 +10,20 @@ Router.post("/new-device", async (req, res) => {
     powerAdapter: req.body.powerAdapter,
     bag: req.body.bag,
     typeId: req.body.typeId,
-    vendor: req.body.vendor,
-    invoiceNo: req.body.invoiceNo,
+    warranty: req.body?.warranty,
+    warrantyPeriod: parseFloat(req.body?.warrantyPeriod),
     remarks: req.body.remarks,
-    //deviceType: await DeviceType.findById(req.body.typeId)
   };
-
-  device["deviceType"] = await DeviceType.findById(req.body.typeId);
 
   if (Object.keys(req.body).includes("isAvailable"))
     device["isAvailable"] = req.body.isAvailable;
 
   Device.create(device)
     .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+    .catch((err) => {
+      console.log(err);
+      res.status(200).json({ error: err });
+    });
 });
 
 Router.get("/:all", (req, res) => {
@@ -34,35 +33,41 @@ Router.get("/:all", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.get("/:id/:all", (req, res) => {
+Router.get("/:serialNo/:all", (req, res) => {
   let withRelations = req.params.all === "all";
-  Device.findById(parseInt(req.params.id), withRelations)
+  Device.findById(req.params.serialNo, withRelations)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.put("/:id", (req, res) => {
+Router.put("/:serialNo", (req, res) => {
   let device = {
-    serialNo: req.body.serialNo,
-    model: req.body.model,
-    powerAdapter: req.body.powerAdapter,
-    bag: req.body.bag,
-    typeId: req.body.deviceType,
-    vendor: req.body.vendor,
-    invoiceNo: req.body.invoiceNo,
-    remarks: req.body.remarks,
+    model: req.body?.model,
+    powerAdapter: req.body?.powerAdapter,
+    bag: req.body?.bag,
+    typeId: req.body?.deviceType,
+    warranty: req.body?.warranty,
+    warrantyPeriod: req.body?.warrantyPeriod,
+    isAvailable: req.body?.isAvailable,
+    remarks: req.body?.remarks,
   };
 
   if (Object.keys(req.body).includes("isAvailable"))
     device["isAvailable"] = req.body.isAvailable;
 
-  Device.updateById(id, device)
+  Device.updateById(req.params.serialNo, device)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.delete("/:id", (req, res) => {
-  Device.deleteById(req.params.id)
+Router.delete("/:serialNo", (req, res) => {
+  Device.deleteById(req.params.serialNo)
+    .then((result) => res.status(200).json(result))
+    .catch((err) => res.status(200).json({ error: err }));
+});
+
+Router.post("/filter", (req, res) => {
+  Device.findUsingFilters(req.body)
     .then((result) => res.status(200).json(result))
     .catch((err) => res.status(200).json({ error: err }));
 });
