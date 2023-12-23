@@ -48,16 +48,18 @@ export default function AddUpdateDeviceAllocation(props) {
     });
   }
 
-  const { action } = props;
+  const { action, employee } = props;
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const onDrawerOpened = () => {
+    console.log(employee);
     if (drawerVisible) {
       form.setFieldsValue({
         handedOn: moment(Date.now()),
         hasReturned: false,
+        employeeId: employee ? employee.coreId : "",
       });
     }
   };
@@ -128,6 +130,7 @@ export default function AddUpdateDeviceAllocation(props) {
                     placeholder="Select an Employee"
                     optionFilterProp="children"
                     filterOption={filterOption}
+                    disabled={employee ? true : false}
                     options={employees.map((v, i) => ({
                       value: v.coreId,
                       label: `${v.firstName} ${v.lastName}`,

@@ -88,7 +88,9 @@ export default function Allocations() {
   return (
     <div>
       <Card
-        title={`Device Allocations ${employee?.firstName ? " : "+ employee?.firstName : ""} ${employee?.lastName ? employee?.lastName : ""}`}
+        title={`Device Allocations ${
+          employee?.firstName ? " : " + employee?.firstName : ""
+        } ${employee?.lastName ? employee?.lastName : ""}`}
         style={{ margin: "20px", borderRadius: "15px" }}
         extra={
           <Tooltip title="New Device Allocation">
@@ -98,7 +100,7 @@ export default function Allocations() {
           </Tooltip>
         }
       >
-        <AddUpdateDeviceAllocation action={"ADD"} />
+        <AddUpdateDeviceAllocation action={"ADD"} employee={employee} />
         <Table columns={columns} dataSource={allocations} />
       </Card>
     </div>
