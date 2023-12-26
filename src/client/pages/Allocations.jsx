@@ -2,12 +2,17 @@ import { Button, Card, Space, Table, Tag, Tooltip } from "antd";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
+import { EditOutlined } from "@ant-design/icons";
+
 import AddUpdateDeviceAllocation from "./AddUpdateDeviceAllocation";
 
 export default function Allocations() {
   const { state } = useLocation();
   const [employee, setEmployee] = useState({});
+  const [action, setAction] = useState("");
   const [scope, setScope] = useState("all");
+  const [allocation, setAllocation] = useState({});
+
   const { getAllocationsThunk, actionDrawer } = useStoreActions(
     (actions) => actions.allocations
   );
@@ -83,6 +88,23 @@ export default function Allocations() {
       dataIndex: "remarks",
       key: "remarks",
     },
+    {
+      title: "Action",
+      key: "action",
+      render: (text, record) => (
+        <Space size="middle">
+          <Button
+            icon={<EditOutlined />}
+            shape="circle"
+            onClick={() => {
+              setAction("UPDATE");
+              setAllocation(record)
+              actionDrawer();
+            }}
+          ></Button>
+        </Space>
+      ),
+    },
   ];
 
   return (
@@ -94,13 +116,23 @@ export default function Allocations() {
         style={{ margin: "20px", borderRadius: "15px" }}
         extra={
           <Tooltip title="New Device Allocation">
-            <Button type="primary" onClick={actionDrawer}>
+            <Button
+              type="primary"
+              onClick={() => {
+                setAction("ADD");
+                actionDrawer();
+              }}
+            >
               New Device Allocation
             </Button>
           </Tooltip>
         }
       >
-        <AddUpdateDeviceAllocation action={"ADD"} employee={employee} />
+        <AddUpdateDeviceAllocation
+          action={action}
+          employee={employee}
+          allocation={allocation}
+        />
         <Table columns={columns} dataSource={allocations} />
       </Card>
     </div>

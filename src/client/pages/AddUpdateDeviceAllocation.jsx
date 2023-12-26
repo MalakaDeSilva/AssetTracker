@@ -39,28 +39,30 @@ export default function AddUpdateDeviceAllocation(props) {
     getDevicesUsingFilter({ isAvailable: true });
   }, []);
 
-  const options = [];
-  for (let i = 0; i < 100000; i++) {
-    const value = `${i.toString(36)}${i}`;
-    options.push({
-      label: value,
-      value,
-    });
-  }
-
-  const { action, employee } = props;
+  const { action, employee, allocation } = props;
 
   const filterOption = (input, option) =>
     (option?.label ?? "").toLowerCase().includes(input.toLowerCase());
 
   const onDrawerOpened = () => {
-    console.log(employee);
     if (drawerVisible) {
-      form.setFieldsValue({
-        handedOn: moment(Date.now()),
-        hasReturned: false,
-        employeeId: employee ? employee.coreId : "",
-      });
+      if (allocation) {
+        form.setFieldsValue({
+          deviceId: allocation?.deviceId,
+          employeeId: allocation?.employeeId,
+          handedOn: moment(allocation?.handedOn),
+          hasReturned: allocation?.hasReturned,
+          returnedOn: allocation?.returnedOn
+            ? moment(allocation?.returnedOn)
+            : "",
+        });
+      } else {
+        form.setFieldsValue({
+          handedOn: moment(Date.now()),
+          hasReturned: false,
+          employeeId: employee ? employee.coreId : "",
+        });
+      }
     }
   };
 
@@ -91,28 +93,22 @@ export default function AddUpdateDeviceAllocation(props) {
         <Form layout="vertical" form={form} onFinish={onFinish}>
           <Row gutter={16}>
             <Col span={24}>
-              {devices.length == 0 ? (
-                <Space style={{ padding: "0px 0px 15px 10px" }}>
-                  <Text type="danger">No available devices found.</Text>
-                </Space>
-              ) : (
-                <Form.Item
-                  name={"deviceId"}
-                  label={"Device"}
-                  rules={[{ required: true, message: "Device is required." }]}
-                >
-                  <Select
-                    showSearch
-                    placeholder="Select a Device"
-                    optionFilterProp="children"
-                    filterOption={filterOption}
-                    options={devices.map((v, i) => ({
-                      value: v.serialNo,
-                      label: v.serialNo,
-                    }))}
-                  />
-                </Form.Item>
-              )}
+              <Form.Item
+                name={"deviceId"}
+                label={"Device"}
+                rules={[{ required: true, message: "Device is required." }]}
+              >
+                <Select
+                  showSearch
+                  placeholder="Select a Device"
+                  optionFilterProp="children"
+                  filterOption={filterOption}
+                  options={devices.map((v, i) => ({
+                    value: v.serialNo,
+                    label: v.serialNo,
+                  }))}
+                />
+              </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
