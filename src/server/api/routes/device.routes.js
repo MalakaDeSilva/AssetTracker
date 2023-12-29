@@ -26,18 +26,22 @@ Router.post("/new-device", async (req, res) => {
     });
 });
 
-Router.get("/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  Device.findMany(withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
-});
+Router.get("/", (req, res) => {
+  let withRelations = req.query.all === "y";
+  let serialNo = req.query.serialNo;
 
-Router.get("/:serialNo/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  Device.findById(req.params.serialNo, withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+  let filter = req.query;
+  delete filter.all;
+
+  if (serialNo) {
+    Device.findById(serialNo, withRelations)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  } else {
+    Device.findMany(withRelations, filter)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  }
 });
 
 Router.put("/:serialNo", (req, res) => {

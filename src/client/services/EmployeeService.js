@@ -3,11 +3,11 @@ import axiosIns from "../utils/Axios";
 /* const baseURL = process.env.REACT_APP_BASE_URL; */
 
 export async function getEmployeeData(scope) {
-  return await axiosIns.get(`/api/employees/${scope}`);
+  return await axiosIns.get(`/api/employees?all=${scope}`);
 }
 
 export async function getEmployeeDataById(scope, id) {
-  return await axiosIns.get(`/api/employees/${id}/${scope}`);
+  return await axiosIns.get(`/api/employees?all=${scope}&coreId=${id}`);
 }
 
 export async function addEmployeeData(data) {

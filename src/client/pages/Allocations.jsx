@@ -1,17 +1,26 @@
-import { Button, Card, Space, Table, Tag, Tooltip } from "antd";
+import {
+  Button,
+  Card,
+  Space,
+  Table,
+  Tag,
+  Tooltip,
+  Select,
+  Breadcrumb,
+} from "antd";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { EditOutlined } from "@ant-design/icons";
 
 import AddUpdateDeviceAllocation from "./AddUpdateDeviceAllocation";
 
 export default function Allocations() {
   const { state } = useLocation();
-  const [employee, setEmployee] = useState({});
+  const [employee, setEmployee] = useState(null);
   const [action, setAction] = useState("");
-  const [scope, setScope] = useState("all");
   const [allocation, setAllocation] = useState({});
+  const [items, setItems] = useState([]);
 
   const { getAllocationsThunk, actionDrawer } = useStoreActions(
     (actions) => actions.allocations
@@ -19,10 +28,43 @@ export default function Allocations() {
   const { isAllocationsLoading, allocations } = useStoreState(
     (state) => state.allocations
   );
+  const { getEmployeesThunk } = useStoreActions((actions) => actions.employees);
+  const { employees } = useStoreState((state) => state.employees);
+
+  const [tableParams, setTableParams] = useState({
+    pagination: {
+      current: 1,
+      pageSize: 5,
+    },
+  });
 
   useEffect(() => {
+    getEmployeesThunk();
     setEmployee(state?.employee);
-    getAllocationsThunk(scope);
+    if (state?.employee) {
+      getAllocationsThunk({ all: "y", employeeId: state?.employee?.coreId });
+      setItems([
+        {
+          title: <Link to={"/"}>Home</Link>,
+        },
+        {
+          title: <Link to={"/employees"}>Employees</Link>,
+        },
+        {
+          title: <Link to={"/allocations"} className="breadcrumb-active">Device Allocations</Link>,
+        },
+      ]);
+    } else {
+      getAllocationsThunk({ all: "y" });
+      setItems([
+        {
+          title: <Link to={"/"}>Home</Link>,
+        },
+        {
+          title: <Link to={"/allocations"} className="breadcrumb-active">Device Allocations</Link>,
+        },
+      ]);
+    }
   }, []);
 
   let columns = [
@@ -98,7 +140,7 @@ export default function Allocations() {
             shape="circle"
             onClick={() => {
               setAction("UPDATE");
-              setAllocation(record)
+              setAllocation(record);
               actionDrawer();
             }}
           ></Button>
@@ -107,25 +149,67 @@ export default function Allocations() {
     },
   ];
 
+  const filter = (value) => {
+    if (value)
+      getAllocationsThunk({
+        all: "y",
+        employeeId: value,
+      });
+    else getAllocationsThunk({ all: "y" });
+  };
+
   return (
     <div>
+      <div
+        style={{
+          margin: "15px 25px 5px 25px",
+        }}
+      >
+        <Breadcrumb items={items} />
+      </div>
       <Card
-        title={`Device Allocations ${
-          employee?.firstName ? " : " + employee?.firstName : ""
-        } ${employee?.lastName ? employee?.lastName : ""}`}
+        title={`Device Allocations`}
         style={{ margin: "20px", borderRadius: "15px" }}
         extra={
-          <Tooltip title="New Device Allocation">
-            <Button
-              type="primary"
-              onClick={() => {
-                setAction("ADD");
-                actionDrawer();
+          <>
+            <Select
+              allowClear
+              showSearch
+              style={{
+                width: 200,
+                marginRight: 10,
               }}
-            >
-              New Device Allocation
-            </Button>
-          </Tooltip>
+              placeholder="Select Employee"
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                (option?.label ?? "").toLowerCase().includes(input)
+              }
+              filterSort={(optionA, optionB) =>
+                (optionA?.label ?? "")
+                  .toLowerCase()
+                  .localeCompare((optionB?.label ?? "").toLowerCase())
+              }
+              options={[
+                ...employees.map((emp) => ({
+                  value: `${emp.coreId}`,
+                  label: `${emp.firstName} ${emp.lastName}`,
+                })),
+              ]}
+              defaultValue={state?.employee?.coreId}
+              onChange={filter}
+            />
+            <Tooltip title="New Device Allocation">
+              <Button
+                type="primary"
+                onClick={() => {
+                  setAction("ADD");
+                  actionDrawer();
+                }}
+              >
+                New Device Allocation
+              </Button>
+            </Tooltip>
+          </>
         }
       >
         <AddUpdateDeviceAllocation
@@ -133,7 +217,11 @@ export default function Allocations() {
           employee={employee}
           allocation={allocation}
         />
-        <Table columns={columns} dataSource={allocations} />
+        <Table
+          columns={columns}
+          dataSource={allocations}
+          pagination={tableParams.pagination}
+        />
       </Card>
     </div>
   );

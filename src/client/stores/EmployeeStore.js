@@ -52,6 +52,7 @@ const EmployeeStore = {
     action.setIsEmpLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getEmployeeData(scope);
       action.setEmployeesAction(
         data.map((v, i) => {
@@ -71,6 +72,7 @@ const EmployeeStore = {
     action.setIsEmpLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getEmployeeDataById(id, scope);
       action.setEmployeesAction(
         data.map((v, i) => {

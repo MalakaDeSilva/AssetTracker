@@ -23,18 +23,22 @@ Router.post("/allocate-device", async (req, res) => {
     });
 });
 
-Router.get("/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  DeviceAllocation.findMany(withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
-});
+Router.get("/", (req, res) => {
+  let withRelations = req.query.all === "y";
+  let id = req.query.id;
 
-Router.get("/:id/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  DeviceAllocation.findById(parseInt(req.params.id), withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+  let filter = req.query;
+  delete filter.all;
+
+  if (id) {
+    DeviceAllocation.findById(parseInt(id), withRelations)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  } else {
+    DeviceAllocation.findMany(withRelations, filter)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  }
 });
 
 Router.delete("/:id", (req, res) => {
@@ -44,18 +48,22 @@ Router.delete("/:id", (req, res) => {
 });
 
 Router.put("/:id", (req, res) => {
-  DeviceAllocation.updateById(id, {
-    employeeId: req.body.employeeId,
-    userId: req.body.userId,
-    handedOn: req.body.handedOn,
-    returnedOn: req.body.returnedOn,
-    remarks: req.body.remarks,
-    hasReturned: req.body?.hasReturned,
-    handedOn: req.body?.handedOn,
-    returnedOn: req.body?.returnedOn,
-  })
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+  try {
+    DeviceAllocation.updateById(parseInt(req.params.id), {
+      employeeId: req.body.employeeId,
+      userId: req.body.userId,
+      handedOn: req.body.handedOn,
+      returnedOn: req.body.returnedOn,
+      remarks: req.body.remarks,
+      hasReturned: req.body?.hasReturned,
+      handedOn: req.body?.handedOn,
+      returnedOn: req.body?.returnedOn,
+    })
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  } catch (e) {
+    res.status(200).json({ error: "Invalid allocation id." });
+  }
 });
 
 module.exports = Router;

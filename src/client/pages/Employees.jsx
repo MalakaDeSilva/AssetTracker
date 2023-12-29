@@ -1,10 +1,10 @@
-import { Button, Card, Flex, Spin, Table, Tooltip } from "antd";
+import { Button, Card, Flex, Spin, Table, Tooltip, Breadcrumb } from "antd";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Employees() {
-  const [scope, setScope] = useState("all");
+  const [scope, setScope] = useState("y");
   const navigate = useNavigate();
 
   const { getEmployeesThunk } = useStoreActions((actions) => actions.employees);
@@ -52,6 +52,20 @@ export default function Employees() {
 
   return (
     <div>
+      <div style={{
+        margin: "15px 25px 5px 25px"
+      }}>
+        <Breadcrumb
+          items={[
+            {
+              title: <Link to={"/"}>Home</Link>,
+            },
+            {
+              title: <Link to={"/employees"} className="breadcrumb-active">Employees</Link>,
+            }
+          ]}
+        />
+      </div>
       <Card
         title="Employees"
         style={{ margin: "20px", borderRadius: "15px" }}

@@ -37,10 +37,14 @@ const AllocationStore = {
   updateAllocationAction: action((state, allocation) => {
     state.allocations = state.allocations.map((alloc) => {
       if (alloc["id"] === allocation["id"]) {
-        alloc = allocation;
+        let _allocation = {
+          ...alloc,
+          ...allocation,
+        };
+        alloc = _allocation;
       }
 
-      return dev;
+      return alloc;
     });
   }),
   actionDrawer: action((state) => {
@@ -48,11 +52,11 @@ const AllocationStore = {
   }),
 
   /* thunks */
-  getAllocationsThunk: thunk(async (action, scope) => {
+  getAllocationsThunk: thunk(async (action, filter) => {
     action.setIsAllocationsLoadingAction();
 
     try {
-      let { data } = await getAllocationData(scope);
+      let { data } = await getAllocationData(filter.all, filter);
 
       action.setAllocationsAction(
         data.map((v, i) => {
@@ -69,6 +73,7 @@ const AllocationStore = {
     action.setIsAllocationsLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getAllocationDataById(scope, id);
       action.setAllocationsAction(data);
     } catch (e) {

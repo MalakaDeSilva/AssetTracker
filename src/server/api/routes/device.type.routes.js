@@ -15,18 +15,22 @@ Router.put("/:id", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.get("/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  DeviceType.findMany(withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
-});
+Router.get("/", (req, res) => {
+  let withRelations = req.query.all === "y";
+  let id = req.query.id;
 
-Router.get("/:id/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  DeviceType.findById(parseInt(req.params.id), withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+  let filter = req.query;
+  delete filter.all;
+
+  if (id) {
+    DeviceType.findById(parseInt(id), withRelations)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  } else {
+    DeviceType.findMany(withRelations, filter)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  }
 });
 
 Router.delete("/:id", (req, res) => {

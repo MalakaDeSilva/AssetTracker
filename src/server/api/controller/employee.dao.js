@@ -14,9 +14,10 @@ function create({ coreId, firstName, lastName, email, floor }) {
   });
 }
 
-function findMany(withRelations) {
+function findMany(withRelations, filter) {
   return prisma.employee.findMany({
     include: { devices: withRelations },
+    where: filter,
   });
 }
 

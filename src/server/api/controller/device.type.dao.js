@@ -11,11 +11,12 @@ function create(data, withRelations) {
   });
 }
 
-function findMany(withRelations) {
+function findMany(withRelations, filter) {
   return prisma.deviceType.findMany({
     include: {
       devices: withRelations,
     },
+    where: filter,
   });
 }
 

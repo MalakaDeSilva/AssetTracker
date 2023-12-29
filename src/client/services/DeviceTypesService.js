@@ -3,11 +3,11 @@ import axiosIns from "../utils/Axios";
 /* const baseURL = process.env.REACT_APP_BASE_URL; */
 
 export async function getDeviceTypeData(scope) {
-  return await axiosIns.get(`/api/device-types/${scope}`);
+  return await axiosIns.get(`/api/device-types?all=${scope}`);
 }
 
 export async function getDeviceTypeDataById(scope, id) {
-  return await axiosIns.get(`/api/device-types/${id}/${scope}`);
+  return await axiosIns.get(`/api/device-types?all=${scope}&id=${id}`);
 }
 
 export async function addDeviceTypeData(data) {

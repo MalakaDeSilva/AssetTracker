@@ -8,6 +8,7 @@ import {
   Flex,
   Spin,
   Modal,
+  Breadcrumb,
 } from "antd";
 import {
   EditOutlined,
@@ -17,6 +18,7 @@ import {
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
 import AddUpdateDevice from "./AddUpdateDevice";
+import { Link } from "react-router-dom";
 
 export default function Devices() {
   const [scope, setScope] = useState("all");
@@ -140,6 +142,22 @@ export default function Devices() {
 
   return (
     <div>
+      <div
+        style={{
+          margin: "15px 25px 5px 25px",
+        }}
+      >
+        <Breadcrumb
+          items={[
+            {
+              title: <Link to={"/"}>Home</Link>,
+            },
+            {
+              title: <Link to={"/devices"} className="breadcrumb-active">Devices</Link>,
+            },
+          ]}
+        />
+      </div>
       <AddUpdateDevice action={action} device={device} />
       <Card
         title="Devices"

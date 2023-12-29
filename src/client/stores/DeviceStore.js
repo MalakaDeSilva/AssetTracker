@@ -53,6 +53,7 @@ const DeviceStore = {
     action.setIsDeviceLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getDeviceData(scope);
 
       action.setDevicesAction(
@@ -70,6 +71,7 @@ const DeviceStore = {
     action.setIsDeviceLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getDeviceDataById(scope, serialNo);
       action.setDevicesAction(data);
     } catch (e) {

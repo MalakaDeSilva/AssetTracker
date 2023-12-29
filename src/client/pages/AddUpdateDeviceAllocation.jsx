@@ -8,15 +8,13 @@ import {
   Row,
   Select,
   Space,
-  Typography,
 } from "antd";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import moment from "moment/moment";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function AddUpdateDeviceAllocation(props) {
   const [form] = Form.useForm();
-  const { Text } = Typography;
 
   const { drawerVisible } = useStoreState((state) => state.allocations);
   const {
@@ -34,10 +32,26 @@ export default function AddUpdateDeviceAllocation(props) {
   const { isEmpLoading, employees } = useStoreState((state) => state.employees);
   const { getEmployeesThunk } = useStoreActions((actions) => actions.employees);
 
+  const [submittable, setSubmittable] = useState(false);
+
+  const values = Form.useWatch([], form);
   useEffect(() => {
-    getEmployeesThunk("none");
+    getEmployeesThunk("n");
     getDevicesUsingFilter({ isAvailable: true });
-  }, []);
+
+    form
+      .validateFields({
+        validateOnly: true,
+      })
+      .then(
+        () => {
+          setSubmittable(true);
+        },
+        () => {
+          setSubmittable(false);
+        }
+      );
+  }, [values]);
 
   const { action, employee, allocation } = props;
 
@@ -70,6 +84,7 @@ export default function AddUpdateDeviceAllocation(props) {
     if (action === "ADD") {
       let result = await addAllocationThunk(values);
     } else if (action === "UPDATE") {
+      values["_id"] = allocation.id;
       let result = await updateAllocationThunk(values);
     }
 
@@ -78,7 +93,6 @@ export default function AddUpdateDeviceAllocation(props) {
       isAvailable: values?.hasReturned,
     });
 
-    getAllocationsThunk();
     actionDrawer();
   };
 
@@ -183,11 +197,7 @@ export default function AddUpdateDeviceAllocation(props) {
             <Col span={12}>
               <Form.Item>
                 <Space>
-                  <Button
-                    type="primary"
-                    htmlType="submit"
-                    disabled={devices.length == 0}
-                  >
+                  <Button type="primary" htmlType="submit">
                     {action === "ADD" ? "Submit" : "Update"}
                   </Button>
                   <Button htmlType="button" onClick={actionDrawer}>

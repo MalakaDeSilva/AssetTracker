@@ -50,6 +50,7 @@ const DeviceTypeStore = {
     action.setIsDeviceTypeLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getDeviceTypeData(scope);
 
       action.setDeviceTypesAction(
@@ -67,6 +68,7 @@ const DeviceTypeStore = {
     action.setIsDeviceTypeLoadingAction();
 
     try {
+      scope = scope ? scope : "n";
       let { data } = await getDeviceTypeDataById(scope, id);
       action.setDeviceTypesAction(data);
     } catch (e) {

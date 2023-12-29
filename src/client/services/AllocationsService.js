@@ -2,12 +2,22 @@ import axiosIns from "../utils/Axios";
 
 /* const baseURL = process.env.REACT_APP_BASE_URL; */
 
-export async function getAllocationData(scope) {
-  return await axiosIns.get(`/api/device-alloc/${scope}`);
+export async function getAllocationData(scope, filter) {
+  let url = `/api/device-alloc`;
+
+  Object.keys(filter).forEach(function (key, idx) {
+    if (idx == 0) {
+      url = url.concat(`?${key}=${filter[key]}`);
+    } else {
+      url = url.concat(`&${key}=${filter[key]}`);
+    }
+  });
+
+  return await axiosIns.get(url);
 }
 
 export async function getAllocationDataById(scope, id) {
-  return await axiosIns.get(`/api/device-alloc/${id}/${scope}`);
+  return await axiosIns.get(`/api/device-alloc?all=${scope}&id=${id}`);
 }
 
 export async function addAllocationData(data) {

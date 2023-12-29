@@ -1,4 +1,4 @@
-import { Button, Card, Table, Tooltip, Space, Modal } from "antd";
+import { Button, Card, Table, Tooltip, Space, Modal, Breadcrumb } from "antd";
 import {
   EditOutlined,
   DeleteOutlined,
@@ -6,10 +6,11 @@ import {
 } from "@ant-design/icons";
 import { useStoreActions, useStoreState } from "easy-peasy";
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import AddUpdateDeviceTypes from "./AddUpdateDeviceTypes";
 
 export default function DeviceTypes() {
-  const [scope, setScope] = useState("all");
+  const [scope, setScope] = useState("y");
   const [action, setAction] = useState("");
   const [devType, setDevType] = useState({});
 
@@ -32,7 +33,7 @@ export default function DeviceTypes() {
       content: "",
       async onOk() {
         await deleteDeviceTypeThunk(record?.id);
-        getDeviceTypesThunk("all");
+        getDeviceTypesThunk("y");
       },
       onCancel() {
         console.log("Cancel");
@@ -77,6 +78,22 @@ export default function DeviceTypes() {
 
   return (
     <div>
+      <div
+        style={{
+          margin: "15px 25px 5px 25px",
+        }}
+      >
+        <Breadcrumb
+          items={[
+            {
+              title: <Link to={"/"}>Home</Link>,
+            },
+            {
+              title: <Link to={"/device-types"} className="breadcrumb-active">Device Types</Link>,
+            },
+          ]}
+        />
+      </div>
       <AddUpdateDeviceTypes action={action} devType={devType} />
       <Card
         title="Device Types"

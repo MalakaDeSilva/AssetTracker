@@ -28,3 +28,7 @@
 .ant-modal-title {
   font-size: 2rem !important;
 }
+
+.breadcrumb-active {
+  color: rgba(0, 0, 0, 0.88) !important;
+}

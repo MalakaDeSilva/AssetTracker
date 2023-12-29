@@ -21,7 +21,7 @@ export default function AddUpdateDeviceTypes(props) {
         });
       }
 
-      getDeviceTypesThunk("all");
+      getDeviceTypesThunk("y");
     } catch (e) {
       console.log("Error :" + e);
     }

@@ -8,14 +8,16 @@ function create(data) {
   });
 }
 
-function findMany(withRelations) {
-  return prisma.deviceAllocation.findMany({
+function findMany(withRelations, filter) {
+  let queryParam = {
     include: {
       employee: withRelations,
       authorizedBy: withRelations,
       device: withRelations,
     },
-  });
+    where: filter,
+  };
+  return prisma.deviceAllocation.findMany(queryParam);
 }
 
 function findById(id, withRelations) {

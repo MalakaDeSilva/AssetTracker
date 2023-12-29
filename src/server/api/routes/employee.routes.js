@@ -17,18 +17,22 @@ Router.post("/new-employee", (req, res) => {
     .catch((err) => res.status(200).json({ error: err }));
 });
 
-Router.get("/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  Employee.findMany(withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
-});
+Router.get("/", (req, res) => {
+  let withRelations = req.query.all === "y";
+  let coreId = req.query.coreId;
 
-Router.get("/:coreId/:all", (req, res) => {
-  let withRelations = req.params.all === "all";
-  Employee.findByCoreId(req.params.coreId, withRelations)
-    .then((result) => res.status(200).json(result))
-    .catch((err) => res.status(200).json({ error: err }));
+  let filter = req.query;
+  delete filter.all;
+
+  if (coreId) {
+    Employee.findByCoreId(req.query.coreId, withRelations)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  } else {
+    Employee.findMany(withRelations, filter)
+      .then((result) => res.status(200).json(result))
+      .catch((err) => res.status(200).json({ error: err }));
+  }
 });
 
 Router.put("/:coreId", (req, res) => {

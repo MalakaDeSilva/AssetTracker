@@ -3,11 +3,11 @@ import axiosIns from "../utils/Axios";
 /* const baseURL = process.env.REACT_APP_BASE_URL; */
 
 export async function getDeviceData(scope) {
-  return await axiosIns.get(`/api/devices/${scope}`);
+  return await axiosIns.get(`/api/devices?all=${scope}`);
 }
 
-export async function getDeviceDataById(scope, id) {
-  return await axiosIns.get(`/api/devices/${id}/${scope}`);
+export async function getDeviceDataById(scope, serialNo) {
+  return await axiosIns.get(`/api/devices?all=${scope}&serialNo=${serialNo}`);
 }
 
 export async function addDeviceData(data) {
