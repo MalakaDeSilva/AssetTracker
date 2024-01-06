@@ -21,5 +21,4 @@ fi
 # Start Application
 echo "Starting the app..."
 npx kill-port 3000
-start /wait http://127.0.0.1:3000/
-npm run start && read -p "Press enter to exit..."
+npm run d-start && read -p "Press enter to exit..."
