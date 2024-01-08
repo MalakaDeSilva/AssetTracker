@@ -6,16 +6,22 @@ if [ ! -d "node_modules" ]; then
   npm install
 fi
 
+package='cross-env'
+if [ `npm list | grep -c $package` -eq 0 ]; then
+  echo "Preparing environment..."
+  npm install
+fi
+
+package='electron'
+if [ `npm list | grep -c $package` -eq 0 ]; then
+  echo "Preparing environment..."
+  npm install
+fi
+
 # Check if app is built
 if [ ! -d "dist" ]; then
   echo "Building the app..."
   npm run build
-fi
-
-package='cross-env'
-if [ `npm list | grep -c $package` -eq 0 ]; then
-  echo "Preparing environment..."
-  npm install --save-dev cross-env
 fi
 
 # Start Application
